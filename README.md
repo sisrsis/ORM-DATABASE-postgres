@@ -1,10 +1,10 @@
 # ORM-DATABASE-postgres
 
-## write example code 
+## write example postgres
 
 
 ```python
-from orm_database_postgres import Sqlite
+from orm_database_postgres import PostgreSQL
 import asyncio
 from pydantic import BaseModel
 
@@ -14,7 +14,7 @@ class users(BaseModel):
     email: str
 
 
-sqlite =  Sqlite("example.db")
+postgres = PostgreSQL(host="127.0.0.1",user="postgres",database="wallet",password="123412341234")
 
 
 

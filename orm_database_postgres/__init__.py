@@ -1,1 +1,1 @@
-from orm_database_postgres.orm_database_postgres import Sqlite
+from orm_database_postgres.orm_database_postgres import PostgreSQL

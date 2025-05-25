@@ -3,7 +3,7 @@ import asyncpg
 import sys
 import datetime
 
-class Sqlite:
+class PostgreSQL:
     def __init__(self, host: str, user: str, password: str, database: str):
         self.host = host
         self.user = user
