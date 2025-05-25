@@ -30,6 +30,5 @@ async def main():
     print(result)
     #await postgres.delete("users",{"users_rt":"test2"})
     #await postgres.update("users",{"users_rt":"test1"},{"users_rt":"test2"})
-asyncio.run(main())
 
 ```
