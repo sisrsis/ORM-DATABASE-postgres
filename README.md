@@ -14,7 +14,7 @@ class users(BaseModel):
     email: str
 
 
-postgres = PostgreSQL(host="127.0.0.1",user="postgres",database="wallet",password="123412341234")
+postgres = PostgreSQL(host="127.0.0.1",user="postgres",database="wallet",password="12341234")
 
 
 
@@ -23,13 +23,13 @@ async def main():
     data1 = [{"users_rt":"test1","password_rt":"1234","email":"test1@mail.com"},
             {"users_rt":"test2","password_rt":"1234","email":"test2@mail.com"},
             {"users_rt":"test3","password_rt":"1234","email":"test3@mail.com"}]
-    await sqlite.start()
-    #await sqlite.teble_create_BaseModel("users",users)
-    #await sqlite.insert("users",data1)
-    #result = await  sqlite.select("users",["users_rt","email"])
-    #print(result)
-    #await sqlite.delete("users",{"users_rt":"test2"})
-    await sqlite.update("users",{"users_rt":"test1"},{"users_rt":"test2"})
+    await postgres.start()
+    #await postgres.teble_create_BaseModel("users",users)
+    #await postgres.insert("users",data1)
+    result = await  postgres.select("users",["users_rt","email"])
+    print(result)
+    #await postgres.delete("users",{"users_rt":"test2"})
+    #await postgres.update("users",{"users_rt":"test1"},{"users_rt":"test2"})
 asyncio.run(main())
 
 ```
