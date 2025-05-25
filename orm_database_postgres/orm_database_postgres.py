@@ -13,7 +13,10 @@ class PostgreSQL:
     async def start(self):
         try:
             self.db = await asyncpg.connect(host=self.host, user=self.user, password=self.password, database=self.database)
-        
+        except:
+            print("Error connecting sqlite")
+            sys.exit(1)
+
 
     async def teble_create_BaseModel(self,table:str , class_BaseModel):
         query = self.ObjectQueryBuilder.query_baseModel_create_table(table,class_BaseModel)
