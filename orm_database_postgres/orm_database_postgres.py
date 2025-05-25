@@ -14,7 +14,7 @@ class PostgreSQL:
         try:
             self.db = await asyncpg.connect(host=self.host, user=self.user, password=self.password, database=self.database)
         except:
-            print("Error connecting sqlite")
+            print("Error connecting postgres")
             sys.exit(1)
 
 
