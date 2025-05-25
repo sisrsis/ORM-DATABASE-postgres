@@ -9,7 +9,7 @@ class PostgreSQL:
         self.user = user
         self.password = password
         self.database = database
-
+        self.ObjectQueryBuilder = QueryBuilder()
     async def start(self):
         try:
             self.db = await asyncpg.connect(host=self.host, user=self.user, password=self.password, database=self.database)
@@ -21,18 +21,14 @@ class PostgreSQL:
     async def teble_create_BaseModel(self,table:str , class_BaseModel):
         query = self.ObjectQueryBuilder.query_baseModel_create_table(table,class_BaseModel)
         try:
-            cur = self.db.cursor() 
-            cur.execute(query)
-            self.db.commit()
+            await self.db.execute(query)
             return True
         except: 
             return False
 
     async def teble_create(self, table: str, field: dict):
         query = self.ObjectQueryBuilder.query_create_table(table,field)
-        cur = self.db.cursor() 
-        cur.execute(query)
-        self.db.commit()
+        await self.db.execute(query)
 
 
 
@@ -48,10 +44,7 @@ class PostgreSQL:
             for value_item in value.items():
                 
                 data +=  ( value_item[1],)
-            cur = self.db.cursor() 
-            cur.execute(query,data)
-            self.db.commit()
-
+            await self.db.executemany(query,[data])
         elif isinstance(value,list):
             data_list = []
             for single_value in value:
@@ -60,10 +53,7 @@ class PostgreSQL:
                     data +=  ( value_item[1],)
 
                 data_list.append(data)
-            
-            cur = self.db.cursor() 
-            cur.executemany(query,data_list)
-            self.db.commit()
+            await self.db.executemany(query,data_list)
 
 
 
@@ -83,21 +73,26 @@ class PostgreSQL:
         query_limit = self.ObjectQueryBuilder.Query_limit(limit)
         
         query = f"{query_feild} {query_table} {query_filter} {query_order} {query_limit}"
-        cur = self.db.cursor()
-        cur.execute(query)
-        result = cur.fetchall()
-
+        
+        #await self.db.prepare(query)
+        result = await  self.db.fetch(query)
+        data = {}
+        data_row = []
+        for a in result:
+            conter = 0
+            for b in a:
+                data[filed[conter]] = b
+                conter += 1
+            data_row.append(dict(data))
+        return data_row        
          
-        return result
 
     
     async def delete(self,table:str,filter,like:bool=False,filter_and:bool=True):
         query_table = self.ObjectQueryBuilder.Query_delete(table)
         query_filter = self.ObjectQueryBuilder.Query_filter(filter,like=like,filter_and=filter_and)
         query = f"{query_table} {query_filter}"
-        cur = self.db.cursor()
-        cur.execute(query)
-        self.db.commit()
+        await self.db.execute(query)
     
 
     async def update(self,table:str,filter:dict,value:dict):
@@ -105,9 +100,8 @@ class PostgreSQL:
         query_value = self.ObjectQueryBuilder.Query_value(value)
         query_filter = self.ObjectQueryBuilder.Query_filter(filter,False,False)
         query = f"{query_table} {query_value} {query_filter} "
-        cur = self.db.cursor()
-        cur.execute(query)
-        self.db.commit()
+        await self.db.execute(query)
+
 
 
 

@@ -83,7 +83,7 @@ class QueryBuilder:
             for value_item in value:
                 return self.list_keys_dict_to_str(query=query,value=value_item,key="?")
         elif isinstance(value,dict):
-                return self.list_keys_dict_to_str(query=query,value=value,key="?")
+                return self.list_keys_dict_to_str(query=query,value=value,key="$1")
 
         
 
@@ -123,9 +123,9 @@ class QueryBuilder:
                         query = query + f"{key} LIKE '%{filter[key]}%' OR "
                 elif like == False:
                     if filter_and == True:
-                        query = query + f'{key}="{filter[key]}" AND '
+                        query = query + f"{key}='{filter[key]}' AND "
                     elif filter_and == False:
-                        query = query + f'{key}="{filter[key]}" OR '
+                        query = query + f"{key}='{filter[key]}' OR "
             query = query[:-4]
             return query
 
@@ -179,10 +179,11 @@ class QueryBuilder:
     def list_keys_dict_to_str(self,query:str,value,key=None):
   
 
-
+        namber = 0 
         for value_key in value.keys():
+            namber = namber + 1
             if key != None:
-                query = query + f"{key},"
+                query = query + f" ${namber} ,"
             elif key == None:
                 query = query + f"{value_key},"
         return query[:-1]+")"
