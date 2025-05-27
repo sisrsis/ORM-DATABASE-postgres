@@ -67,23 +67,25 @@ class PostgreSQL:
 
 
         query_feild = self.ObjectQueryBuilder.Query_feild(filed)
-        query_table = self.ObjectQueryBuilder.Query_table(table)
+        query_table = self.ObjectQueryBuilder.Query_table(table,filed)
         query_filter = self.ObjectQueryBuilder.Query_filter(filter,like,filter_and)
         query_order = self.ObjectQueryBuilder.Query_order(order)
         query_limit = self.ObjectQueryBuilder.Query_limit(limit)
         
         query = f"{query_feild} {query_table} {query_filter} {query_order} {query_limit}"
-        
         #await self.db.prepare(query)
         result = await  self.db.fetch(query)
-        data = {}
+        data = []
         data_row = []
-        for a in result:
-            conter = 0
-            for b in a:
-                data[filed[conter]] = b
-                conter += 1
-            data_row.append(dict(data))
+        try:
+            for a in result:
+                for b in a:
+                    data.append(b)
+                data_row.append(data)
+                data = []
+        except :
+            for a in result[0]:
+                data_row.append(a)
         return data_row        
          
 

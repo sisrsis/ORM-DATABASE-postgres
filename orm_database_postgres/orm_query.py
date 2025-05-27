@@ -106,9 +106,11 @@ class QueryBuilder:
             return query
     
 
-    def Query_table(self,table:str):
-        return f"FROM {table}"
-    
+    def Query_table(self,table:str,chack:list):
+        if chack == []:
+            return f"{table}"
+        else:
+            return f"FROM {table}"
 
     def Query_filter(self,filter:dict,like:bool=None,filter_and:bool=None):
         if filter == {}:
